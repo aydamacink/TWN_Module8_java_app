@@ -3,12 +3,13 @@ def gv
 pipeline {   
     agent any
     
-stages {
-        stage("build") {
+    stages {
+    	stage("build") {
             steps {
 		echo 'building the application'
             }
         }
+	    
         stage("test") {
             steps {
                 steps{
@@ -26,3 +27,4 @@ stages {
         }
 
     }
+}
