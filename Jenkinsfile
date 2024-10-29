@@ -12,32 +12,31 @@ pipeline {
                 }
             }
         }
+        
         stage("build") {
-
-            steps {
-                when{
-                    expression {
-                        BRANCH_NAME=="main"
-                    }
+            when {
+                expression {
+                    BRANCH_NAME == "main"
                 }
+            }
+            steps {
                 script {
                     echo "Building the application"
                 }
             }
-
+        }
+        
         stage("deploy") {
-            steps {
-                when{
-                    expression {
-                        BRANCH_NAME=="main"
-                    }
+            when {
+                expression {
+                    BRANCH_NAME == "main"
                 }
-                script{
-                    echo "deploying the application"
+            }
+            steps {
+                script {
+                    echo "Deploying the application"
                 }
             }
         }               
     }
-}            
-    }
-} 
+}
