@@ -29,7 +29,7 @@ pipeline {
             steps {
                 script {
                     buildDockerImage 'dm1984/demo-app:jma-3.0'
-                    dockerLogin|()
+                    dockerLogin()
                     dockerPush 'dm1984/demo-app:jma-3.0'
                 }
             }
