@@ -33,9 +33,13 @@ pipeline {
         stage("build-image") {
             steps {
                 script {
-                    buildImage 'dm1984/demo-app:jma-3.0'
-                    gv.dockerLogin()
-                    gv.dockerPush 'dm1984/demo-app:jma-3.0'
+                    // Create an instance of Docker with `this` as the script reference
+                    def docker = new com.example.Docker(this)
+
+                // Use the `Docker` methods directly
+                buildImage 'dm1984/demo-app:jma-3.0'
+                docker.dockerLogin()
+                docker.dockerPush 'dm1984/demo-app:jma-3.0'
                 }
             }
         }
