@@ -33,7 +33,7 @@ pipeline {
         stage("build-image") {
             steps {
                 script {
-                    buildDockerImage 'dm1984/demo-app:jma-3.0'
+                    buildImage 'dm1984/demo-app:jma-3.0'
                     dockerLogin()
                     dockerPush 'dm1984/demo-app:jma-3.0'
                 }
