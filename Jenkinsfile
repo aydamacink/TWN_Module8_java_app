@@ -30,29 +30,20 @@ pipeline {
             }
         }
 
-        stage("build-image") {
+        stage("build and push image") {
             steps {
                 script {
-                    // Create an instance of Docker with `this` as the script reference
-                    def docker = new com.example.Docker(this)
-
-                // Use the `Docker` methods directly
-                buildImage 'dm1984/demo-app:jma-3.0'
-                docker.dockerLogin()
-                docker.dockerPush 'dm1984/demo-app:jma-3.0'
+                    buildImage 'dm1984/demo-app:jma-3.0'
+                    dockerLogin()
+                    dockerPush 'dm1984/demo-app:jma-3.0'
                 }
             }
         }
         
         stage("deploy") {
-            when {
-                expression {
-                    BRANCH_NAME == "main"
-                }
-            }
             steps {
                 script {
-                    echo "Deploying the application"
+                    gv.deployApp()
                 }
             }
         }               
