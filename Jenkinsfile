@@ -8,12 +8,16 @@ pipeline {
             steps {
                 script {
                     echo "incrementing app version"
+                    // Run Maven commands to set the new version using Maven's exec plugin to calculate the new version internally
                     sh '''
                         mvn build-helper:parse-version versions:set \
-                        -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion} \
-                        versions:commit
+                            -DnewVersion=$(mvn -q \
+                                -Dexec.executable="echo" \
+                                -Dexec.args='${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion}' \
+                                org.codehaus.mojo:exec-maven-plugin:1.3.1:exec) versions:commit
                     '''
 
+                    // Read the updated version from pom.xml to set as the Docker image tag
                     def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
                     def version = matcher[0][1]
                     env.IMAGE_NAME = "$version-$BUILD_NUMBER"
