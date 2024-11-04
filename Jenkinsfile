@@ -8,13 +8,13 @@ pipeline {
             steps {
                 script {
                     echo "incrementing app version"
-                    sh 'mvn build-helper:parse-version versions:set /
-                    DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} /
-                    versions:commit'
+                    sh '''mvn build-helper:parse-version versions:set \
+                        -DnewVersion=${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion} \
+                        versions:commit'''
 
-                   def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
-                   def version = matcher[0][1]
-                   env.IMAGE_NAME = "$version-$BUILD_NUMBER"
+                    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
+                    def version = matcher[0][1]
+                    env.IMAGE_NAME = "$version-$BUILD_NUMBER"
                 }
             }
         }
@@ -33,11 +33,11 @@ pipeline {
                 script {
                     echo "building the docker image..."
                     withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                    sh "docker build -t dm1984/demo-app:${IMAGE_NAME} ."
-                    sh 'echo $PASS | docker login -u $USER --password-stdin'
-                    sh "docker push dm1984/demo-app:${IMAGE_NAME}'
+                        sh "docker build -t dm1984/demo-app:${env.IMAGE_NAME} ."
+                        sh 'echo $PASS | docker login -u $USER --password-stdin'
+                        sh "docker push dm1984/demo-app:${env.IMAGE_NAME}"
                     }
-    }
+                }
             }
         }
         
