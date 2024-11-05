@@ -69,7 +69,7 @@ pipeline {
 
                         sh "git remote set-url origin https://${USER}:${PASS}@github.com/aydamacink/TWN_Module8_java_app.git"
                         sh 'git add .'
-                        sh 'git comit -m "ci: version bump"'
+                        sh 'git commit -m "ci: version bump"'
                         sh 'git push origin HEAD:increment-version'
                     }
                 }
