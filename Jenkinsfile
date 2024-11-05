@@ -55,7 +55,7 @@ pipeline {
             }
         }   
 
-        stage("commit version update ") {
+        stage("commit the version update ") {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github-jenkins', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
